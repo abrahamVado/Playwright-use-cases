@@ -1,0 +1,28 @@
+<!doctype html><html><head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Edge Cases Demo</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<script>
+  tailwind.config = {
+    theme: {
+      extend: {
+        colors: {
+          brand: { DEFAULT: '#7c9cff', dark: '#6d8bff' }
+        },
+        boxShadow: {
+          soft: '0 8px 24px rgba(0,0,0,.25)'
+        }
+      }
+    }
+  }
+</script>
+</head><body class='bg-slate-950 text-slate-100 p-4'>
+<div id="loading" class="text-slate-400 text-sm mb-2">Loading…</div>
+<script>setTimeout(()=>document.getElementById('loading').remove(),500);</script>
+<label class="block text-sm text-slate-300 mb-1">Card number<input class="w-full bg-slate-900 border border-slate-800 rounded-lg p-2" placeholder="Card number"></label>
+<div class="grid grid-cols-2 gap-3">
+  <label class="block text-sm text-slate-300">Expiry<input class="w-full bg-slate-900 border border-slate-800 rounded-lg p-2" placeholder="MM / YY"></label>
+  <label class="block text-sm text-slate-300">CVC<input class="w-full bg-slate-900 border border-slate-800 rounded-lg p-2" placeholder="CVC"></label>
+</div>
+</body></html>

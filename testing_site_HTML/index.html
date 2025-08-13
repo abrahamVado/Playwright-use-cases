@@ -1,0 +1,54 @@
+<!doctype html><html><head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Edge Cases Demo</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<script>
+  tailwind.config = {
+    theme: {
+      extend: {
+        colors: {
+          brand: { DEFAULT: '#7c9cff', dark: '#6d8bff' }
+        },
+        boxShadow: {
+          soft: '0 8px 24px rgba(0,0,0,.25)'
+        }
+      }
+    }
+  }
+</script>
+<title>Home</title></head><body class='bg-slate-950'>
+<div class="sticky top-0 z-10 bg-slate-900/80 backdrop-blur border-b border-slate-800">
+  <div class="max-w-6xl mx-auto px-4 py-3 flex items-center gap-4">
+    <div class="font-semibold text-slate-100">🧪 Edge Cases <span class="ml-2 text-xs text-brand-300 border border-slate-700 rounded-full px-2 py-0.5">demo</span></div>
+    <nav class="ml-auto flex gap-4 text-slate-300 text-sm">
+      <a class="hover:text-white" href="/index.html">Home</a>
+      <a class="hover:text-white" href="/dashboard.html">Dashboard</a>
+      <a class="hover:text-white" href="/orders.html">Orders</a>
+      <a class="hover:text-white" href="/checkout.html">Checkout</a>
+      <a class="hover:text-white" href="/booking.html">Booking</a>
+    </nav>
+  </div>
+</div>
+<div class="max-w-6xl mx-auto px-4 py-6 text-slate-100">
+
+<section class="bg-gradient-to-br from-slate-900 to-slate-800 rounded-2xl border border-slate-800 shadow-soft p-6 flex items-center justify-between">
+  <div>
+    <h1 class="text-2xl font-semibold">Welcome to the Demo</h1>
+    <p class="text-slate-400 text-sm mt-1">Use this site to exercise Playwright edge cases. Network calls mocked via Service Worker.</p>
+    <div class="flex gap-2 mt-3">
+      <span class="px-2 py-0.5 border border-slate-700 rounded-full text-xs text-brand-300">v2</span>
+      <span class="px-2 py-0.5 border border-slate-700 rounded-full text-xs text-slate-300">dark</span>
+      <span class="px-2 py-0.5 border border-slate-700 rounded-full text-xs text-slate-300">rtl-ready</span>
+    </div>
+  </div>
+  <div class="flex items-center gap-3">
+    <div data-testid="live-counter" class="px-2 py-1 rounded bg-slate-800 border border-slate-700 text-brand-300 text-sm">42</div>
+    <a class="inline-flex items-center gap-2 bg-brand hover:bg-brand-dark text-slate-900 font-semibold rounded-lg px-3 py-2 shadow-soft" href="/orders.html">View Orders</a>
+  </div>
+</section>
+<p class="text-slate-400 text-xs mt-4">This page registers a Service Worker to serve <code class="text-slate-300">/api/orders</code> and <code class="text-slate-300">/api/feed</code>.</p>
+
+  <footer class="text-center text-xs text-slate-400 py-10">© Demo App — Built for Playwright edge-case testing.</footer>
+</div>
+<script>if('serviceWorker' in navigator) navigator.serviceWorker.register('/sw.js');</script></body></html>

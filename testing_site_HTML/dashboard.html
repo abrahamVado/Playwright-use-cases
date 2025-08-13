@@ -1,0 +1,45 @@
+<!doctype html><html><head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Edge Cases Demo</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<script>
+  tailwind.config = {
+    theme: {
+      extend: {
+        colors: {
+          brand: { DEFAULT: '#7c9cff', dark: '#6d8bff' }
+        },
+        boxShadow: {
+          soft: '0 8px 24px rgba(0,0,0,.25)'
+        }
+      }
+    }
+  }
+</script>
+<title>Dashboard</title></head><body class='bg-slate-950'>
+<div class="sticky top-0 z-10 bg-slate-900/80 backdrop-blur border-b border-slate-800">
+  <div class="max-w-6xl mx-auto px-4 py-3 flex items-center gap-4">
+    <div class="font-semibold text-slate-100">🧪 Edge Cases <span class="ml-2 text-xs text-brand-300 border border-slate-700 rounded-full px-2 py-0.5">demo</span></div>
+    <nav class="ml-auto flex gap-4 text-slate-300 text-sm">
+      <a class="hover:text-white" href="/index.html">Home</a>
+      <a class="hover:text-white" href="/dashboard.html">Dashboard</a>
+      <a class="hover:text-white" href="/orders.html">Orders</a>
+      <a class="hover:text-white" href="/checkout.html">Checkout</a>
+      <a class="hover:text-white" href="/booking.html">Booking</a>
+    </nav>
+  </div>
+</div>
+<div class="max-w-6xl mx-auto px-4 py-6 text-slate-100">
+
+<h1 class="text-xl font-semibold mb-4">Dashboard</h1>
+<div id="nav-drawer" data-testid="nav-drawer" class="rounded-xl border border-slate-800 bg-slate-900 p-4 shadow-soft">Navigation Drawer</div>
+<div class="grid md:grid-cols-3 gap-4 mt-4">
+  <div class="rounded-xl border border-slate-800 bg-slate-900 p-4 shadow-soft"><h3 class="font-medium">Sales</h3><p class="text-emerald-300 text-lg">$12,430</p></div>
+  <div class="rounded-xl border border-slate-800 bg-slate-900 p-4 shadow-soft"><h3 class="font-medium">Orders</h3><p class="text-slate-100 text-lg">238</p></div>
+  <div class="rounded-xl border border-slate-800 bg-slate-900 p-4 shadow-soft"><h3 class="font-medium">Visitors</h3><p class="text-slate-100 text-lg">4,572</p></div>
+</div>
+
+  <footer class="text-center text-xs text-slate-400 py-10">© Demo App — Built for Playwright edge-case testing.</footer>
+</div>
+<script>if('serviceWorker' in navigator) navigator.serviceWorker.register('/sw.js');</script></body></html>

@@ -1,0 +1,55 @@
+<!doctype html><html><head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Edge Cases Demo</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<script>
+  tailwind.config = {
+    theme: {
+      extend: {
+        colors: {
+          brand: { DEFAULT: '#7c9cff', dark: '#6d8bff' }
+        },
+        boxShadow: {
+          soft: '0 8px 24px rgba(0,0,0,.25)'
+        }
+      }
+    }
+  }
+</script>
+<title>Products</title></head><body class='bg-slate-950'>
+<div class="sticky top-0 z-10 bg-slate-900/80 backdrop-blur border-b border-slate-800">
+  <div class="max-w-6xl mx-auto px-4 py-3 flex items-center gap-4">
+    <div class="font-semibold text-slate-100">🧪 Edge Cases <span class="ml-2 text-xs text-brand-300 border border-slate-700 rounded-full px-2 py-0.5">demo</span></div>
+    <nav class="ml-auto flex gap-4 text-slate-300 text-sm">
+      <a class="hover:text-white" href="/index.html">Home</a>
+      <a class="hover:text-white" href="/dashboard.html">Dashboard</a>
+      <a class="hover:text-white" href="/orders.html">Orders</a>
+      <a class="hover:text-white" href="/checkout.html">Checkout</a>
+      <a class="hover:text-white" href="/booking.html">Booking</a>
+    </nav>
+  </div>
+</div>
+<div class="max-w-6xl mx-auto px-4 py-6 text-slate-100">
+
+<h1 class="text-xl font-semibold mb-4">Products</h1>
+<div class="relative inline-block">
+  <div data-testid="category-dropdown" class="min-w-[260px] cursor-pointer bg-slate-950 border border-slate-800 rounded-lg p-2 text-slate-200">Choose…</div>
+  <div id="menu" class="hidden absolute mt-2 z-10 bg-slate-900 border border-slate-800 rounded-xl p-2 w-64 shadow-soft" role="listbox">
+    <input type="text" aria-label="Filter" class="w-full bg-slate-950 border border-slate-800 rounded-lg p-2 text-slate-100 mb-2" placeholder="Filter categories">
+    <div role="option" class="px-2 py-1 rounded hover:bg-slate-800">Electronics</div>
+    <div role="option" class="px-2 py-1 rounded hover:bg-slate-800">Furniture</div>
+  </div>
+</div>
+<script>
+const dd=document.querySelector('[data-testid=category-dropdown]');
+const menu=document.getElementById('menu');
+dd.addEventListener('click',()=>{ menu.classList.toggle('hidden'); });
+menu.addEventListener('click',e=>{
+  if(e.target.getAttribute('role')==='option'){ dd.textContent=e.target.textContent; menu.classList.add('hidden'); }
+});
+</script>
+
+  <footer class="text-center text-xs text-slate-400 py-10">© Demo App — Built for Playwright edge-case testing.</footer>
+</div>
+<script>if('serviceWorker' in navigator) navigator.serviceWorker.register('/sw.js');</script></body></html>

@@ -1,0 +1,22 @@
+{
+  "name": "playwright-edge-cases",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "test": "playwright test",
+    "test:ui": "playwright test --ui",
+    "test:network": "playwright test -g '@network'",
+    "test:time": "playwright test -g '@time'",
+    "test:locale": "playwright test -g '@locale'",
+    "test:auth": "playwright test -g '@auth'",
+    "test:ui-dom": "playwright test -g '@ui'",
+    "test:uploads": "playwright test -g '@uploads'",
+    "test:data": "playwright test -g '@data'",
+    "test:storage": "playwright test -g '@storage'",
+    "test:security": "playwright test -g '@security'"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.46.0"
+  }
+}

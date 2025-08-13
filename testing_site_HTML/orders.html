@@ -1,0 +1,68 @@
+<!doctype html><html><head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Edge Cases Demo</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<script>
+  tailwind.config = {
+    theme: {
+      extend: {
+        colors: {
+          brand: { DEFAULT: '#7c9cff', dark: '#6d8bff' }
+        },
+        boxShadow: {
+          soft: '0 8px 24px rgba(0,0,0,.25)'
+        }
+      }
+    }
+  }
+</script>
+<title>Orders</title></head><body class='bg-slate-950'>
+<div class="sticky top-0 z-10 bg-slate-900/80 backdrop-blur border-b border-slate-800">
+  <div class="max-w-6xl mx-auto px-4 py-3 flex items-center gap-4">
+    <div class="font-semibold text-slate-100">🧪 Edge Cases <span class="ml-2 text-xs text-brand-300 border border-slate-700 rounded-full px-2 py-0.5">demo</span></div>
+    <nav class="ml-auto flex gap-4 text-slate-300 text-sm">
+      <a class="hover:text-white" href="/index.html">Home</a>
+      <a class="hover:text-white" href="/dashboard.html">Dashboard</a>
+      <a class="hover:text-white" href="/orders.html">Orders</a>
+      <a class="hover:text-white" href="/checkout.html">Checkout</a>
+      <a class="hover:text-white" href="/booking.html">Booking</a>
+    </nav>
+  </div>
+</div>
+<div class="max-w-6xl mx-auto px-4 py-6 text-slate-100">
+
+<h1 class="text-xl font-semibold mb-4">Orders</h1>
+<div class="rounded-xl border border-slate-800 bg-slate-900 p-4 shadow-soft">
+  <div class="flex items-center gap-3 mb-3">
+    <input role="searchbox" aria-label="Search" id="search" class="w-full bg-slate-950 border border-slate-800 rounded-lg p-2 text-slate-100" placeholder="Search invoices (e.g., INV-2025)">
+    <span class="text-slate-400 text-xs ml-auto">Click "Date" to simulate sort</span>
+  </div>
+  <table class="w-full">
+    <thead class="text-slate-400 text-xs uppercase">
+      <tr><th role="columnheader" class="text-left py-2">Date</th><th class="text-left py-2">Invoice</th></tr>
+    </thead>
+    <tbody id="rows" class="[&>tr]:bg-slate-900 [&>tr]:border [&>tr]:border-slate-800 [&>tr>td]:py-2 [&>tr>td]:px-2"></tbody>
+  </table>
+  <div class="flex items-center gap-3 mt-3">
+    <button id="prev" class="border border-slate-700 text-slate-200 rounded-lg px-3 py-1.5">Prev</button>
+    <button id="next" class="bg-brand hover:bg-brand-dark text-slate-900 font-semibold rounded-lg px-3 py-1.5 shadow-soft">Next</button>
+  </div>
+</div>
+<script>
+async function load(q=''){
+  const res = await fetch('/api/orders?q='+encodeURIComponent(q));
+  const json = await res.json();
+  const el = document.getElementById('rows'); el.innerHTML='';
+  json.items.forEach(x=>{ const tr=document.createElement('tr'); tr.innerHTML=`<td>${x.date}</td><td>${x.id}</td>`; el.appendChild(tr); });
+}
+document.getElementById('search').addEventListener('input', e=>load(e.target.value));
+document.querySelector('[role=columnheader]').addEventListener('click', ()=>load());
+document.getElementById('next').addEventListener('click', ()=>load('page2'));
+document.getElementById('prev').addEventListener('click', ()=>load('page1'));
+load();
+</script>
+
+  <footer class="text-center text-xs text-slate-400 py-10">© Demo App — Built for Playwright edge-case testing.</footer>
+</div>
+<script>if('serviceWorker' in navigator) navigator.serviceWorker.register('/sw.js');</script></body></html>

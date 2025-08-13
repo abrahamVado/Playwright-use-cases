@@ -1,0 +1,74 @@
+<!doctype html><html><head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Edge Cases Demo</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<script>
+  tailwind.config = {
+    theme: {
+      extend: {
+        colors: {
+          brand: { DEFAULT: '#7c9cff', dark: '#6d8bff' }
+        },
+        boxShadow: {
+          soft: '0 8px 24px rgba(0,0,0,.25)'
+        }
+      }
+    }
+  }
+</script>
+<title>New User</title></head><body class='bg-slate-950'>
+<div class="sticky top-0 z-10 bg-slate-900/80 backdrop-blur border-b border-slate-800">
+  <div class="max-w-6xl mx-auto px-4 py-3 flex items-center gap-4">
+    <div class="font-semibold text-slate-100">🧪 Edge Cases <span class="ml-2 text-xs text-brand-300 border border-slate-700 rounded-full px-2 py-0.5">demo</span></div>
+    <nav class="ml-auto flex gap-4 text-slate-300 text-sm">
+      <a class="hover:text-white" href="/index.html">Home</a>
+      <a class="hover:text-white" href="/dashboard.html">Dashboard</a>
+      <a class="hover:text-white" href="/orders.html">Orders</a>
+      <a class="hover:text-white" href="/checkout.html">Checkout</a>
+      <a class="hover:text-white" href="/booking.html">Booking</a>
+    </nav>
+  </div>
+</div>
+<div class="max-w-6xl mx-auto px-4 py-6 text-slate-100">
+
+<h1 class="text-xl font-semibold mb-4">New User</h1>
+<div class="grid md:grid-cols-2 gap-4">
+  <div class="rounded-xl border border-slate-800 bg-slate-900 p-4 shadow-soft">
+    <h3 class="font-medium mb-2">Country (Select2-like)</h3>
+    <div class="select2-container">
+      <input class="select2-search__field w-full bg-slate-950 border border-slate-800 rounded-lg p-2 text-slate-100" placeholder="Search country">
+      <div role="listbox" class="mt-2">
+        <div role="option" class="px-2 py-1 rounded hover:bg-slate-800 cursor-pointer">Mexico</div>
+        <div role="option" class="px-2 py-1 rounded hover:bg-slate-800 cursor-pointer">Spain</div>
+      </div>
+    </div>
+  </div>
+  <div class="rounded-xl border border-slate-800 bg-slate-900 p-4 shadow-soft">
+    <h3 class="font-medium mb-2">Roles (multi)</h3>
+    <label class="block text-sm text-slate-300 mb-1">Roles</label>
+    <input id="roles" type="hidden">
+    <div class="select2 bg-slate-950 border border-slate-800 rounded-lg p-2">
+      <div class="chips flex gap-2 flex-wrap" id="chips"></div>
+      <input class="select2-search__field w-full bg-slate-950 border border-slate-800 rounded-lg p-2 text-slate-100 mt-2" placeholder="Search role">
+    </div>
+    <div id="role-options" role="listbox" class="mt-2">
+      <div role="option" class="px-2 py-1 rounded hover:bg-slate-800 cursor-pointer">Admin</div>
+      <div role="option" class="px-2 py-1 rounded hover:bg-slate-800 cursor-pointer">Editor</div>
+    </div>
+  </div>
+</div>
+<script>
+document.querySelectorAll('#role-options [role=option]').forEach(o=>{
+  o.addEventListener('click',()=>{
+    const chips=document.getElementById('chips');
+    const chip=document.createElement('span'); chip.className='inline-flex items-center gap-1 bg-slate-800 border border-slate-700 rounded-full px-2 py-0.5 text-xs'; chip.textContent=o.textContent;
+    const x=document.createElement('button'); x.textContent='×'; x.className='text-slate-400 hover:text-white'; x.onclick=()=>chip.remove();
+    chip.appendChild(x); chips.appendChild(chip);
+  });
+});
+</script>
+
+  <footer class="text-center text-xs text-slate-400 py-10">© Demo App — Built for Playwright edge-case testing.</footer>
+</div>
+<script>if('serviceWorker' in navigator) navigator.serviceWorker.register('/sw.js');</script></body></html>
