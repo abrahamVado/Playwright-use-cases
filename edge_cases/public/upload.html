@@ -1,0 +1,108 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>Upload</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <style>
+    :root { --ok:#0a5722; --okbg:#e6ffed; --err:#7a0b0b; --errbg:#ffe6e6; --muted:#6b7280; }
+    body{font-family:system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif;margin:40px;line-height:1.4}
+    .row{margin:12px 0}
+    .meta{color:var(--muted); font-size:12px}
+    ul{margin:6px 0 0; padding-left:16px}
+    .toast{margin-top:10px;padding:8px 12px;border-radius:8px;display:none}
+    .toast.success{background:var(--okbg);color:var(--ok)}
+    .toast.error{background:var(--errbg);color:var(--err)}
+    .busy{display:none; font-size:12px; color:var(--muted); margin-left:8px}
+    .controls{display:flex; gap:8px; align-items:center; flex-wrap:wrap}
+    button{border:1px solid #d1d5db; background:#fff; padding:6px 10px; border-radius:8px; cursor:pointer}
+    button:hover{border-color:#9ca3af}
+  </style>
+</head>
+<body>
+  <h2>Upload a file</h2>
+
+  <div class="row controls">
+    <input type="file" multiple/>
+    <span class="busy" data-test="upload-busy" aria-live="polite">Uploading…</span>
+    <button type="button" data-test="reset-btn" title="Clear selection">Reset</button>
+  </div>
+
+  <div class="row">
+    <span class="meta">Selected files: <strong data-test="file-count">0</strong></span>
+    <ul data-test="file-list" aria-live="polite"></ul>
+  </div>
+
+  <div class="toast success" data-test="upload-success" role="status" aria-live="polite">Upload complete</div>
+  <div class="toast error" data-test="upload-error" role="status" aria-live="polite">Upload failed</div>
+
+  <script>
+    const input = document.querySelector('input[type="file"]');
+    const ok = document.querySelector('[data-test="upload-success"]');
+    const err = document.querySelector('[data-test="upload-error"]');
+    const busy = document.querySelector('[data-test="upload-busy"]');
+    const countEl = document.querySelector('[data-test="file-count"]');
+    const listEl = document.querySelector('[data-test="file-list"]');
+    const resetBtn = document.querySelector('[data-test="reset-btn"]');
+
+    function hideToasts(){ ok.style.display='none'; err.style.display='none'; }
+    function setBusy(on){ busy.style.display = on ? 'inline-block' : 'none'; input.disabled = on; }
+    function clearList(){ countEl.textContent = '0'; listEl.innerHTML = ''; }
+    function renderList(files){
+      clearList();
+      countEl.textContent = String(files.length);
+      files.forEach(f => {
+        const li = document.createElement('li');
+        const name = document.createElement('span');
+        const size = document.createElement('span');
+        name.textContent = f.name + ' ';
+        size.textContent = `(${Math.max(1, Math.round(f.size/1024))} KB)`;
+        size.className = 'meta';
+        li.appendChild(name);
+        li.appendChild(size);
+        listEl.appendChild(li);
+      });
+    }
+
+    // Optional guard: block obviously unsafe types (demo-friendly)
+    function disallowed(files){
+      return files.some(f => /\.exe$/i.test(f.name));
+    }
+
+    resetBtn.addEventListener('click', () => {
+      hideToasts();
+      clearList();
+      input.value = ''; // clear selection
+      input.disabled = false;
+      busy.style.display = 'none';
+    });
+
+    input.addEventListener('change', async () => {
+      hideToasts();
+      const files = Array.from(input.files || []);
+      renderList(files);
+      if (!files.length) return;
+
+      if (disallowed(files)) {
+        err.textContent = 'Upload failed: .exe files are not allowed';
+        err.style.display = 'inline-block';
+        return;
+      }
+
+      setBusy(true);
+      try {
+        // For demo purposes we don't stream the file; we just POST to the API.
+        const res = await fetch('/api/upload', { method: 'POST' });
+        if (!res.ok) throw new Error('Server error ' + res.status);
+        ok.textContent = `Upload complete (${files.length} file${files.length>1 ? 's' : ''})`;
+        ok.style.display = 'inline-block';
+      } catch (e) {
+        err.textContent = 'Upload failed';
+        err.style.display = 'inline-block';
+      } finally {
+        setBusy(false);
+      }
+    });
+  </script>
+</body>
+</html>

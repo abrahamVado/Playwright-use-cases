@@ -1,0 +1,57 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8" />
+  <title>Iframe Editor</title>
+  <style>
+    body{font-family:sans-serif;margin:20px;}
+    .row{margin:10px 0;}
+    .toast{margin-top:10px;padding:8px 12px;border-radius:6px;display:none;}
+    .toast.success{background:#e6ffed;color:#0a5722;}
+    .toast.error{background:#ffe6e6;color:#7a0b0b;}
+    .error{color:#7a0b0b;display:none;}
+  </style>
+</head>
+<body>
+  <div data-test="iframe-ready"></div>
+  <div class="row">
+    <label>Title</label><br/>
+    <input data-test="title" type="text" style="width: 320px;" />
+    <div data-test="error-title-required" class="error">Title is required</div>
+  </div>
+  <div class="row">
+    <button data-test="save-btn">Save</button>
+  </div>
+  <div class="toast success" data-test="toast-success">Saved successfully</div>
+  <div class="toast error" data-test="toast-error">Something went wrong</div>
+
+  <script>
+    const title = document.querySelector('[data-test="title"]');
+    const btn = document.querySelector('[data-test="save-btn"]');
+    const err = document.querySelector('[data-test="error-title-required"]');
+    const okToast = document.querySelector('[data-test="toast-success"]');
+    const errToast = document.querySelector('[data-test="toast-error"]');
+
+    function hideToasts(){ okToast.style.display='none'; errToast.style.display='none'; }
+    function hideErrors(){ err.style.display='none'; }
+
+    btn.addEventListener('click', async () => {
+      hideToasts(); hideErrors();
+      if (!title.value.trim()) {
+        err.style.display = 'block';
+        return;
+      }
+      try {
+        const res = await fetch('/api/iframe/save', { method: 'POST', headers: {'Content-Type':'application/json'}, body: JSON.stringify({ title: title.value }) });
+        if (!res.ok) throw new Error('Server error');
+        const json = await res.json();
+        okToast.textContent = 'Saved successfully';
+        okToast.style.display = 'inline-block';
+      } catch (e) {
+        errToast.textContent = 'Save failed';
+        errToast.style.display = 'inline-block';
+      }
+    });
+  </script>
+</body>
+</html>

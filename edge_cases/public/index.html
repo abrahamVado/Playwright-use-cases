@@ -1,0 +1,146 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>Playwright Demo Site</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <style>
+    :root{
+      --bg:#0b0c10;
+      --panel:#151720;
+      --text:#e8e8ef;
+      --muted:#9aa0b4;
+      --accent:#7aa2ff;
+      --accent-2:#48d3a4;
+      --ring: 0 0 0 2px rgba(122,162,255,.5);
+      --radius:16px;
+    }
+    @media (prefers-color-scheme: light){
+      :root{
+        --bg:#f7f7fb; --panel:#ffffff; --text:#1b1e28; --muted:#5a6275;
+        --accent:#3a63ff; --accent-2:#0dbd93;
+      }
+    }
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{
+      margin:0; font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, "Helvetica Neue", Arial, "Noto Sans", "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+      background:linear-gradient(180deg, var(--bg), color-mix(in srgb, var(--bg) 90%, black));
+      color:var(--text);
+    }
+    .wrap{max-width:980px; margin:0 auto; padding:40px 24px;}
+    header{display:flex; align-items:flex-end; justify-content:space-between; gap:16px; margin-bottom:28px;}
+    h1{font-size:clamp(28px, 3vw, 40px); margin:0;}
+    .sub{color:var(--muted); margin:6px 0 0; font-size:15px}
+    .grid{
+      display:grid; gap:16px;
+      grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+      margin:18px 0 8px;
+    }
+    a.card{
+      display:block; text-decoration:none; color:inherit; background:var(--panel); border-radius:var(--radius);
+      padding:18px; border:1px solid color-mix(in srgb, var(--panel), #7aa2ff 10%);
+      transition:transform .12s ease, border-color .12s ease, box-shadow .12s ease;
+      position:relative; overflow:hidden;
+    }
+    a.card:focus-visible{outline:none; box-shadow:var(--ring)}
+    a.card:hover{transform:translateY(-2px); border-color:var(--accent)}
+    .k{font:12px/1.8 ui-monospace, SFMono-Regular, Menlo, Consolas, "Liberation Mono", monospace; color:var(--muted);}
+    .title{font-weight:600; margin-bottom:6px; display:flex; align-items:center; gap:8px;}
+    .desc{color:var(--muted); font-size:14px; margin:0;}
+    .chip{
+      position:absolute; top:10px; right:10px; font-size:11px; color:#0b0c10; background:var(--accent-2);
+      padding:4px 8px; border-radius:999px; font-weight:700; letter-spacing:.2px;
+    }
+    footer{margin-top:28px; color:var(--muted); font-size:13px; display:flex; align-items:center; gap:10px; flex-wrap:wrap;}
+    .kbd{font:12px ui-monospace, SFMono-Regular, Menlo, Consolas; padding:2px 6px; border-radius:6px; border:1px solid color-mix(in srgb, var(--panel), #fff 25%); background:color-mix(in srgb, var(--panel) 85%, #fff); color:var(--text);}
+    .row{display:flex; gap:10px; align-items:center; flex-wrap:wrap;}
+    button{
+      border:1px solid color-mix(in srgb, var(--panel), #fff 25%);
+      background:var(--panel); color:var(--text); padding:8px 12px; border-radius:10px; cursor:pointer;
+    }
+    button:hover{border-color:var(--accent)}
+    .ok{color:var(--accent-2); font-weight:600}
+    .err{color:#ff6b6b; font-weight:600}
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <header>
+      <div>
+        <h1>Playwright Demo Site</h1>
+        <p class="sub">Tiny pages tailored for teaching & recording: iframes, Select2/dropdowns, uploads, and API assertions.</p>
+      </div>
+      <div class="k">Headed: <span id="headed-hint">auto</span></div>
+    </header>
+
+    <div class="grid" role="navigation" aria-label="Demo pages">
+      <a class="card" href="/page-with-iframe.html" aria-label="Open page with iframe" data-test="link-iframe">
+        <span class="chip">1</span>
+        <div class="title">Iframe Editor</div>
+        <p class="desc">Work inside <code>frameLocator</code>, handle readiness, save flow, error states.</p>
+      </a>
+
+      <a class="card" href="/page-with-select2.html" aria-label="Open page with Select2-like dropdown" data-test="link-select2">
+        <span class="chip">2</span>
+        <div class="title">Select2-like Dropdown</div>
+        <p class="desc">Search + select, “no results”, open/close behavior, async list.</p>
+      </a>
+
+      <a class="card" href="/upload.html" aria-label="Open upload page" data-test="link-upload">
+        <span class="chip">3</span>
+        <div class="title">File Upload</div>
+        <p class="desc">Single or repeated uploads; success & error toasts for negative paths.</p>
+      </a>
+
+      <a class="card" href="/cart.html" aria-label="Open cart page for API assertions" data-test="link-cart">
+        <span class="chip">4</span>
+        <div class="title">Cart (API)</div>
+        <p class="desc">Button triggers <code>POST /api/cart</code>; assert payload, headers, status.</p>
+      </a>
+    </div>
+
+    <footer>
+      <div class="row">
+        <span>Shortcuts:</span>
+        <span class="kbd">1</span><span class="kbd">2</span><span class="kbd">3</span><span class="kbd">4</span>
+        <span>to open a card •</span>
+        <button id="ping" type="button">Ping API</button>
+        <span id="ping-status" aria-live="polite" class="k">idle</span>
+      </div>
+    </footer>
+  </div>
+
+  <script>  
+    const links = [
+      '/page-with-iframe.html',
+      '/page-with-select2.html',
+      '/upload.html',
+      '/cart.html'
+    ];
+    addEventListener('keydown', (e) => {
+      const idx = Number(e.key) - 1;
+      if (idx >= 0 && idx < links.length) location.href = links[idx];
+    });
+
+    document.getElementById('headed-hint').textContent =
+      navigator.webdriver ? 'Playwright' : 'Browser';
+
+    const pingBtn = document.getElementById('ping');
+    const pingStatus = document.getElementById('ping-status');
+    pingBtn?.addEventListener('click', async () => {
+      pingStatus.textContent = 'checking…';
+      try {
+        const res = await fetch('/api/cart', {
+          method: 'POST',
+          headers: {'Content-Type': 'application/json'},
+          body: JSON.stringify({ productId: 0, quantity: 0 })
+        });
+        pingStatus.innerHTML = res.ok ? '<span class="ok">OK</span>' : '<span class="err">ERR</span>';
+      } catch {
+        pingStatus.innerHTML = '<span class="err">ERR</span>';
+      }
+    });
+  </script>
+</body>
+</html>

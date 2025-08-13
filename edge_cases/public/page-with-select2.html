@@ -1,0 +1,64 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8" />
+  <title>Select2-like Dropdown</title>
+  <style>
+    body{font-family:sans-serif;margin:40px;}
+    .select2 {width:320px; position: relative;}
+    .select2-selection{border:1px solid #ccc;padding:8px;border-radius:6px;cursor:pointer;}
+    .select2-dropdown{border:1px solid #ccc;border-top:none;display:none;position:absolute;width:100%;background:#fff;z-index:2;}
+    .select2-search__field{width:95%;margin:8px;border:1px solid #ccc;padding:6px;}
+    .select2-results__option{padding:8px;cursor:pointer;}
+    .select2-results__option:hover{background:#f2f2f2;}
+    .select2-selection__rendered{margin-top:6px;color:#333;}
+  </style>
+</head>
+<body>
+  <h2>Select2-like Demo</h2>
+
+  <div class="select2">
+    <div class="select2-selection">Click to select…</div>
+    <div class="select2-dropdown">
+      <input class="select2-search__field" placeholder="Search…" />
+      <div class="select2-results">
+        <!-- options populated by JS -->
+      </div>
+    </div>
+    <div class="select2-selection__rendered"></div>
+  </div>
+
+  <script>
+    const countries = ['Argentina','Brazil','Canada','Denmark','Egypt','France','Germany','Mexico','Spain','USA'];
+    const sel = document.querySelector('.select2');
+    const selection = sel.querySelector('.select2-selection');
+    const dropdown = sel.querySelector('.select2-dropdown');
+    const search = sel.querySelector('.select2-search__field');
+    const results = sel.querySelector('.select2-results');
+    const rendered = sel.querySelector('.select2-selection__rendered');
+
+    function open(){ dropdown.style.display='block'; search.focus(); render(''); }
+    function close(){ dropdown.style.display='none'; }
+    function render(filter){
+      results.innerHTML = '';
+      countries.filter(c => c.toLowerCase().includes(filter.toLowerCase()))
+        .forEach(c => {
+          const opt = document.createElement('div');
+          opt.className = 'select2-results__option';
+          opt.textContent = c;
+          opt.addEventListener('click', () => {
+            rendered.textContent = c;
+            close();
+          });
+          results.appendChild(opt);
+        });
+    }
+
+    selection.addEventListener('click', open);
+    search.addEventListener('input', () => render(search.value));
+    document.addEventListener('click', (e) => {
+      if (!sel.contains(e.target)) close();
+    });
+  </script>
+</body>
+</html>
